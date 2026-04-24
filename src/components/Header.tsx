@@ -1,13 +1,19 @@
+import { useState } from "react";
 import iconAdd from "../assets/images/icon-add.svg";
 import iconAvatar from "../assets/images/image-avatar.webp";
 import iconMenuHamburger from "../assets/images/icon-menu-hamburger.svg";
 import iconSearch from "../assets/images/icon-search.svg";
+import AddBookMark from "./AddBookMark";
 
 type HeaderProps = {
   onOpenSidebar?: () => void;
 };
 
 const Header = ({ onOpenSidebar }: HeaderProps) => {
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+
   return (
     <>
       <header className="w-full bg-white px-4 py-3 md:px-6 lg:px-8 shadow-xs">
@@ -35,15 +41,19 @@ const Header = ({ onOpenSidebar }: HeaderProps) => {
             </label>
           </div>
           <div className="flex flex-row gap-2 md:gap-3">
-            <button className="flex flex-row items-center sm:gap-2 rounded-sm bg-teal-800 px-3 py-2 text-white md:px-5 md:py-1">
+            <button
+              className="flex flex-row items-center sm:gap-2 rounded-sm bg-teal-800 px-3 py-2 text-white md:px-5 md:py-1"
+              onClick={handleOpen}
+            >
               <img src={iconAdd} alt="addIcon" className="w-5 h-5" />
               <span className="text-sm hidden sm:block">Add Bookmark</span>
             </button>
             <button className="w-10 h-10 rounded-full">
-              <img src={iconAvatar} alt="avatar"  />
+              <img src={iconAvatar} alt="avatar" />
             </button>
           </div>
         </div>
+        {open ? <AddBookMark setOpen={setOpen} /> : null}
       </header>
     </>
   );

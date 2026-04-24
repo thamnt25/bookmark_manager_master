@@ -9,7 +9,7 @@ function App() {
 
   return (
     <>
-      <main className="flex min-h-screen flex-row bg-neutral-50">
+      <main className="flex min-h-screen flex-row bg-[#E8F2F1]">
         <SideBar
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}

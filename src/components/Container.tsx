@@ -4,7 +4,7 @@ import Card from "./Card";
 const Container = () => {
   return (
     <>
-      <section className="mt-8 px-8">
+      <section className="mt-5 px-8">
         <div className="flex flex-row justify-between">
           <h2 className="text-2xl text-black font-semibold">All bookmarks</h2>
           <button className="flex flex-row gap-2 bg-white rounded-sm border-1 border-neutral-300 items-center px-2 py-2">
@@ -12,7 +12,10 @@ const Container = () => {
             <span className="text-sm">Sort by</span>
           </button>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-10 mt-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-7 mt-3">
+          <Card />
+          <Card />
+          <Card />
           <Card />
           <Card />
           <Card />

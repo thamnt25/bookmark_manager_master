@@ -9,7 +9,7 @@
 
 @theme {
   --color-neutral-0: #ffffff;
-  --color-neutral-100: #e8f0ef;
+  --color-neutral-100: #E8F2F1;
   --color-neutral-300: #dde9e7;
   --color-neutral-400: #c0cfcc;
   --color-neutral-500: #899492;
@@ -63,7 +63,7 @@
 }
 
 :root {
-  --background: #e8f0ef;
+  --background: #E8F2F1;
   --foreground: #051513;
   --surface: #ffffff;
   --surface-elevated: #ffffff;
