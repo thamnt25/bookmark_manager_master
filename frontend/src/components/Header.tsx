@@ -42,7 +42,7 @@ const Header = ({ onOpenSidebar }: HeaderProps) => {
           </div>
           <div className="flex flex-row gap-2 md:gap-3">
             <button
-              className="flex flex-row items-center sm:gap-2 rounded-sm bg-teal-800 px-3 py-2 text-white md:px-5 md:py-1"
+              className="flex flex-row items-center sm:gap-2 rounded-sm bg-teal-800 px-3 py-2 text-white md:px-5 md:py-1 hover:bg-teal-700"
               onClick={handleOpen}
             >
               <img src={iconAdd} alt="addIcon" className="w-5 h-5" />

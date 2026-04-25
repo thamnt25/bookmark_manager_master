@@ -7,7 +7,6 @@ import iconLastVisit from "../assets/images/icon-last-visited.svg";
 import iconCreated from "../assets/images/icon-created.svg";
 import iconEdit from "../assets/images/icon-edit.svg";
 import iconArchive from "../assets/images/icon-archive.svg";
-import iconUnArchive from "../assets/images/icon-unarchive.svg";
 import iconCopy from "../assets/images/icon-copy.svg";
 
 const Card = () => {
