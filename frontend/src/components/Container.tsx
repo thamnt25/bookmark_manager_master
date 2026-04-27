@@ -1,7 +1,12 @@
 import iconSort from "../assets/images/icon-sort.svg";
 import Card from "./Card";
+import type { BookMark } from "../models/BookMark";
 
-const Container = () => {
+type ContainerProps = {
+  bookmarks: BookMark[];
+};
+
+const Container = ({ bookmarks }: ContainerProps) => {
   return (
     <>
       <section className="mt-5 px-8">
@@ -13,12 +18,9 @@ const Container = () => {
           </button>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-7 mt-3">
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
+          {bookmarks.map((bookmark) => (
+            <Card key={bookmark.id} bookmark={bookmark} />
+          ))}
         </div>
       </section>
     </>

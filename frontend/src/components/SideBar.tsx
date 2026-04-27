@@ -8,18 +8,15 @@ const navItems = [
   { title: "Archived", icon: iconArchived, active: false },
 ];
 
-const tags = [
-  { name: "AI", count: 1 },
-  { name: "Community", count: 2 },
-  { name: "CSS", count: 3 },
-];
-
 type SideBarProps = {
   isOpen?: boolean;
   onClose?: () => void;
+  tags?: Map<string, number>;
 };
 
-const SideBar = ({ isOpen = false, onClose }: SideBarProps) => {
+const SideBar = ({ isOpen = false, onClose, tags = new Map() }: SideBarProps) => {
+  const tagItems = Array.from(tags, ([name, count]) => ({ name, count }));
+
   return (
     <>
       {isOpen ? (
@@ -64,7 +61,7 @@ const SideBar = ({ isOpen = false, onClose }: SideBarProps) => {
         </nav>
         <div className="mt-5 px-2 text-sm font-medium text-neutral-500">TAGS</div>
         <div className="mt-5 flex flex-col gap-4 px-2">
-          {tags.map((item) => (
+          {tagItems.map((item) => (
             <div key={item.name} className="flex flex-row justify-between">
               <div className="flex flex-row gap-2">
                 <input type="checkbox" className="rounded-xs" />
