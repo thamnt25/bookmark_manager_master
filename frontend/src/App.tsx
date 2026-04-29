@@ -11,17 +11,19 @@ const URL: string = import.meta.env.VITE_BACKEND_URL;
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [bookMarks, setBookMarks] = useState<BookMark[]>([]);
-  const [bookmarkTags, setBookMarksTags] = useState<Map<string, number>>(new Map());
+  const [bookmarkTags, setBookMarksTags] = useState<Map<string, number>>(
+    new Map(),
+  );
 
   useEffect(() => {
     const fetchAllBookMark = async () => {
       const response = await axios.get<BookMark[]>(URL);
       setBookMarks(response.data);
+      const tags = tagFilter(response.data);
+      setBookMarksTags(tags);
+      // console.log(tags);
     };
     fetchAllBookMark();
-    const tags = tagFilter(bookMarks);
-    setBookMarksTags(tags);
-    console.log(bookmarkTags);
   }, []);
 
   function tagFilter(bookMarks: BookMark[]): Map<string, number> {
@@ -46,6 +48,7 @@ function App() {
         <SideBar
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
+          tags = {bookmarkTags}
         />
         <div className="w-full">
           <Header onOpenSidebar={() => setIsSidebarOpen(true)} />
