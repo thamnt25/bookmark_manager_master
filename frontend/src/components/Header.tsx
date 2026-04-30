@@ -7,9 +7,15 @@ import AddBookMark from "./AddBookMark";
 
 type HeaderProps = {
   onOpenSidebar?: () => void;
+  searchQuery: string;
+  onSearchChange: (value: string) => void;
 };
 
-const Header = ({ onOpenSidebar }: HeaderProps) => {
+const Header = ({
+  onOpenSidebar,
+  searchQuery,
+  onSearchChange,
+}: HeaderProps) => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
@@ -35,8 +41,10 @@ const Header = ({ onOpenSidebar }: HeaderProps) => {
               />
               <input
                 type="text"
+                value={searchQuery}
+                onChange={(event) => onSearchChange(event.target.value)}
                 className="w-full border-0 bg-transparent text-sm font-medium text-app placeholder:text-neutral-500 outline-none focus:outline-none focus:ring-0 focus:border-0"
-                placeholder="Search by title..."
+                placeholder="Search bookmarks..."
               />
             </label>
           </div>

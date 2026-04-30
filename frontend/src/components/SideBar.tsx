@@ -2,20 +2,34 @@ import iconHome from "../assets/images/icon-home.svg";
 import iconArchived from "../assets/images/icon-archive.svg";
 import iconClose from "../assets/images/icon-close.svg";
 import iconLogoLightTheme from "../assets/images/logo-light-theme.svg";
-
-const navItems = [
-  { title: "Home", icon: iconHome, active: true },
-  { title: "Archived", icon: iconArchived, active: false },
-];
+import { type ChangeEvent } from "react";
 
 type SideBarProps = {
   isOpen?: boolean;
   onClose?: () => void;
   tags?: Map<string, number>;
+  selectedTags: string[];
+  onTagToggle: (tag: string) => void;
+  selectedHomeTab: boolean;
+  setSelectedHomeTab: (selectedHomeTab: boolean) => void;
 };
 
-const SideBar = ({ isOpen = false, onClose, tags = new Map() }: SideBarProps) => {
+const SideBar = ({
+  isOpen = false,
+  onClose,
+  tags = new Map(),
+  selectedTags,
+  onTagToggle,
+  selectedHomeTab,
+  setSelectedHomeTab,
+}: SideBarProps) => {
   const tagItems = Array.from(tags, ([name, count]) => ({ name, count }));
+
+  function handleChangeTab(event: ChangeEvent<HTMLInputElement>) {
+    const value = event.target.value;
+    const isSelectedHome = value === "home" ? true : false;
+    setSelectedHomeTab(isSelectedHome);
+  }
 
   return (
     <>
@@ -45,26 +59,44 @@ const SideBar = ({ isOpen = false, onClose, tags = new Map() }: SideBarProps) =>
           </button>
         </div>
         <nav className="mt-5 flex flex-col gap-2">
-          {navItems.map((item) => (
-            <button
-              key={item.title}
-              className={`flex w-full flex-row gap-2 rounded-sm px-2 py-2 text-left ${
-                item.active ? "bg-neutral-100" : "hover:bg-neutral-100"
-              }`}
-            >
-              <img src={item.icon} alt="" />
-              <span className="text-sm font-medium text-neutral-500">
-                {item.title}
-              </span>
-            </button>
-          ))}
+          <button
+            className={`flex w-full flex-row gap-2 rounded-sm px-2 py-2 text-left ${
+              selectedHomeTab ? "bg-neutral-100" : "hover:bg-neutral-100"
+            }`}
+            value="home"
+            onClick={() => handleChangeTab}
+          >
+            <img src={iconHome} alt="" />
+            <span className="text-sm font-medium text-neutral-500">Home</span>
+          </button>
+          <button
+            className={`flex w-full flex-row gap-2 rounded-sm px-2 py-2 text-left ${
+              !selectedHomeTab ? "bg-neutral-100" : "hover:bg-neutral-100"
+            }`}
+            onClick={() => handleChangeTab}
+            value="archived"
+          >
+            <img src={iconArchived} alt="" />
+            <span className="text-sm font-medium text-neutral-500">
+              Archived
+            </span>
+          </button>
         </nav>
-        <div className="mt-5 px-2 text-sm font-medium text-neutral-500">TAGS</div>
-        <div className="mt-5 flex flex-col gap-4 px-2">
-          {tagItems.map((item) => (
+        <div className="mt-5 px-2 text-sm font-medium text-neutral-500">
+          TAGS
+        </div>
+        <div className="mt-5 flex flex-col gap-4 px-2 overflow-scroll xl:overflow-auto">
+          {tagItems.map((item, index) => (
             <div key={item.name} className="flex flex-row justify-between">
               <div className="flex flex-row gap-2">
-                <input type="checkbox" className="rounded-xs" />
+                <input
+                  type="checkbox"
+                  className="rounded-xs"
+                  id={`checkbox_id_${index}`}
+                  value={item.name}
+                  checked={selectedTags.includes(item.name)}
+                  onChange={() => onTagToggle(item.name)}
+                />
                 <span className="text-sm font-medium text-neutral-500">
                   {item.name}
                 </span>

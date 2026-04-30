@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import SideBar from "./components/SideBar";
 import Header from "./components/Header";
 import Container from "./components/Container";
@@ -14,31 +14,60 @@ function App() {
   const [bookmarkTags, setBookMarksTags] = useState<Map<string, number>>(
     new Map(),
   );
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedHome, setSelectedHomeTab] = useState(true);
 
   useEffect(() => {
     const fetchAllBookMark = async () => {
       const response = await axios.get<BookMark[]>(URL);
       setBookMarks(response.data);
-      const tags = tagFilter(response.data);
-      setBookMarksTags(tags);
-      // console.log(tags);
+      setBookMarksTags(tagFilter(response.data));
     };
+
     fetchAllBookMark();
   }, []);
+
+  const query = searchQuery.trim().toLowerCase();
+  const filteredBookMarks = bookMarks.filter((bookmark) => {
+    const matchesSearch =
+      query.length === 0 ||
+      [bookmark.title, bookmark.description, bookmark.url, ...bookmark.tags]
+        .join(" ")
+        .toLowerCase()
+        .includes(query);
+
+    const matchesTags =
+      selectedTags.length === 0 ||
+      selectedTags.some((selectedTag) =>
+        bookmark.tags.some(
+          (tag) => tag.toLowerCase() === selectedTag.toLowerCase(),
+        ),
+      );
+    
+    return matchesSearch && matchesTags;
+  });
+
+  const handleTagToggle = (tag: string) => {
+    setSelectedTags((currentTags) =>
+      currentTags.includes(tag)
+        ? currentTags.filter((currentTag) => currentTag !== tag)
+        : [...currentTags, tag],
+    );
+  };
 
   function tagFilter(bookMarks: BookMark[]): Map<string, number> {
     if (bookMarks.length === 0) {
       return new Map<string, number>();
     }
-    let tags = new Map<string, number>();
+
+    const tags = new Map<string, number>();
     bookMarks.forEach((item) => {
       item.tags.forEach((tag) => {
-        if (!tags.has(tag)) {
-          tags.set(tag, 1);
-        }
         tags.set(tag, (tags.get(tag) ?? 0) + 1);
       });
     });
+
     return tags;
   }
 
@@ -48,11 +77,19 @@ function App() {
         <SideBar
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
-          tags = {bookmarkTags}
+          tags={bookmarkTags}
+          selectedTags={selectedTags}
+          onTagToggle={handleTagToggle}
+          selectedHomeTab={selectedHome}
+          setSelectedHomeTab={setSelectedHomeTab}
         />
         <div className="w-full">
-          <Header onOpenSidebar={() => setIsSidebarOpen(true)} />
-          <Container bookmarks={bookMarks} />
+          <Header
+            onOpenSidebar={() => setIsSidebarOpen(true)}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+          />
+          <Container bookmarks={filteredBookMarks} />
         </div>
       </main>
     </>
