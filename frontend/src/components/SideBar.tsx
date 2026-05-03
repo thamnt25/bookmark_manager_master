@@ -2,7 +2,6 @@ import iconHome from "../assets/images/icon-home.svg";
 import iconArchived from "../assets/images/icon-archive.svg";
 import iconClose from "../assets/images/icon-close.svg";
 import iconLogoLightTheme from "../assets/images/logo-light-theme.svg";
-import { type ChangeEvent } from "react";
 
 type SideBarProps = {
   isOpen?: boolean;
@@ -24,12 +23,6 @@ const SideBar = ({
   setSelectedHomeTab,
 }: SideBarProps) => {
   const tagItems = Array.from(tags, ([name, count]) => ({ name, count }));
-
-  function handleChangeTab(event: ChangeEvent<HTMLInputElement>) {
-    const value = event.target.value;
-    const isSelectedHome = value === "home" ? true : false;
-    setSelectedHomeTab(isSelectedHome);
-  }
 
   return (
     <>
@@ -63,8 +56,7 @@ const SideBar = ({
             className={`flex w-full flex-row gap-2 rounded-sm px-2 py-2 text-left ${
               selectedHomeTab ? "bg-neutral-100" : "hover:bg-neutral-100"
             }`}
-            value="home"
-            onClick={() => handleChangeTab}
+            onClick={() => setSelectedHomeTab(true)}
           >
             <img src={iconHome} alt="" />
             <span className="text-sm font-medium text-neutral-500">Home</span>
@@ -73,8 +65,7 @@ const SideBar = ({
             className={`flex w-full flex-row gap-2 rounded-sm px-2 py-2 text-left ${
               !selectedHomeTab ? "bg-neutral-100" : "hover:bg-neutral-100"
             }`}
-            onClick={() => handleChangeTab}
-            value="archived"
+            onClick={() => setSelectedHomeTab(false)}
           >
             <img src={iconArchived} alt="" />
             <span className="text-sm font-medium text-neutral-500">

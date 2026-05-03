@@ -5,8 +5,7 @@ import Header from "./components/Header";
 import Container from "./components/Container";
 import axios from "axios";
 import type { BookMark } from "./models/BookMark";
-
-const URL: string = import.meta.env.VITE_BACKEND_URL;
+import { API_URLS } from "./config/api";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -20,8 +19,9 @@ function App() {
 
   useEffect(() => {
     const fetchAllBookMark = async () => {
-      const response = await axios.get<BookMark[]>(URL);
+      const response = await axios.get<BookMark[]>(API_URLS.bookMarks);
       setBookMarks(response.data);
+      console.log(response.data);
       setBookMarksTags(tagFilter(response.data));
     };
 
@@ -44,8 +44,11 @@ function App() {
           (tag) => tag.toLowerCase() === selectedTag.toLowerCase(),
         ),
       );
-    
-    return matchesSearch && matchesTags;
+
+    const archivedTab = !selectedHome
+      ? bookmark.isArchived
+      : !bookmark.isArchived || bookmark.isArchived;
+    return matchesSearch && matchesTags && archivedTab;
   });
 
   const handleTagToggle = (tag: string) => {
@@ -89,7 +92,11 @@ function App() {
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
           />
-          <Container bookmarks={filteredBookMarks} />
+          <Container
+            bookmarks={filteredBookMarks.sort(
+              (a, b) => Number(b.pinned) - Number(a.pinned),
+            )}
+          />
         </div>
       </main>
     </>
