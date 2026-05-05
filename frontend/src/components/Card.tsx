@@ -57,6 +57,7 @@ function getImageUrl(path: string) {
 
 const Card = ({ bookmark }: CardProps) => {
   const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const toggleOption = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
@@ -65,6 +66,18 @@ const Card = ({ bookmark }: CardProps) => {
 
   const stopMenuClick = (event: MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
+  };
+
+  const handleCopy = async () => {
+    try {
+      const currentUrl = bookmark.url;
+      await navigator.clipboard.writeText(currentUrl);
+
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+    }
   };
 
   return (
@@ -105,7 +118,16 @@ const Card = ({ bookmark }: CardProps) => {
                       </button>
                       <button className="flex flex-row gap-2 items-center hover:bg-neutral-100 px-5 py-2 rounded-sm">
                         <img src={iconCopy} alt="copy" className="w-3 h-3" />
-                        <span className="text-[1rem]">Copy URL</span>
+                        <span className="text-[1rem]" onClick={handleCopy}>
+                          Copy URL
+                        </span>
+                      </button>
+                      <button className="flex flex-row gap-2 items-center hover:bg-neutral-100 px-5 py-2 rounded-sm">
+                        <img src={iconPin} alt="edit" className="w-3 h-3" />
+                        <span className="text-[1rem]">
+                          {" "}
+                          {bookmark.pinned ? "UnPin" : "Pin"}
+                        </span>
                       </button>
                       <button className="flex flex-row gap-2 items-center hover:bg-neutral-100 px-5 py-2 rounded-sm">
                         <img
